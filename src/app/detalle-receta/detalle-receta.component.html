@@ -1,0 +1,74 @@
+<div class="container" style="margin-top: 30px;">
+  <div class="card">
+    <div class="card-header">
+      <button class="btn icon" (click)="modificarComensales(-1)">
+        <span class="material-icons">
+          remove_circle_outline
+        </span>
+      </button>
+      <label for="comensales">Comensales: </label>
+      {{ receta.comensales }}
+      <button class="btn icon" (click)="modificarComensales(1)">
+        <span class="material-icons">
+          add_circle_outline
+        </span>
+      </button>
+    </div>
+    <div class="card-body">
+      <div>
+        <label for="nombre">Nombre:</label>
+        <span [ngClass]="{ isFav: receta.favorita }">{{ receta.nombre }} </span>
+        <button *ngIf="!receta.favorita" class="btn icon" (click)="addFav()">
+          <span class="material-icons">favorite_border</span>
+        </button>
+        <button *ngIf="receta.favorita" class="btn icon" (click)="removeFav()">
+          <span class="material-icons">favorite</span>
+        </button>
+      </div>
+
+      <div>
+        <label for="pasos">Ingredientes: </label>
+        <ul>
+          <li *ngFor="let ingrediente of receta.ingredientes">
+            {{ ingrediente.cantidad * receta.comensales }}
+            {{ ingrediente.unidad }} de
+            {{ ingrediente.ingrediente }}
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <label for="pasos">Pasos: </label>
+        <ul>
+          <li *ngFor="let paso of receta.pasos">
+            {{ paso }}
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <label for="alergenos">Alérgenos: </label>
+        <ul>
+          <li *ngFor="let alergeno of receta.alergenos">
+            {{ alergeno }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-img">
+        <label for="imagen">Foto: </label>
+        <img src="{{ receta.imagen }}" />
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button
+      class="btn btn-secondary"
+      style="margin-top: 20px;"
+      [routerLink]="['/recetas']"
+    >
+      Volver
+    </button>
+  </div>
+</div>

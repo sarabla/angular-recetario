@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card" style="margin-top: 30px;">
+        <div class="card-body">
+          <h2>Listado de recetas</h2>
+          <ul>
+            <li *ngFor="let receta of recetas">
+              <div>
+                <span (click)="selectReceta(receta)">{{ receta.nombre }}</span>
+                <button class="fav btn mce-btn-small"
+                  *ngIf="!receta.favorita"
+                  (click)="addFav(receta)"
+                >
+                  <span class="material-icons">favorite_border</span>
+                </button>
+                <button class="fav btn mce-btn-small"
+
+                  *ngIf="receta.favorita"
+                  (click)="removeFav(receta)"
+                >
+                  <span class="material-icons">favorite</span>
+                </button>
+              </div>
+
+              <div>
+                <button class="btn btn-secondary" (click)="editReceta(receta)">
+                  <div>
+                    <span>Editar</span>
+                    <span class="icon material-icons">edit</span>
+                  </div>
+                </button>
+                <button class="btn btn-secondary" (click)="removeReceta(receta)">
+                  <div>
+                    <span>Borrar</span>
+                    <span class="icon material-icons">delete</span>
+                  </div>
+                </button>
+              </div>
+              <hr class="my-4">
+            </li>
+          </ul>
+        </div>
+
+       <div>
+        <button class="btn btn-primary offset-md-1" style="margin-bottom: 30px;" [routerLink]="['/recetas/new']">
+          ¡Crea tu propia receta!
+        </button>
+       </div>
+      </div>
+
+    </div>
+    <div class="col-md-5">
+      <app-recetas-favoritas></app-recetas-favoritas>
+    </div>
+  </div>
+
+
+</div>
+
+
