@@ -20,7 +20,7 @@ export class DetalleRecetaComponent implements OnInit {
   ngOnInit(): void {
     this.id = Number(this.activatedRoute.snapshot.params.id);
     this.receta = this.recetasService.getOne(this.id);
-    console.log(this.receta.alergenos[0]);
+    console.log(this.receta.imagen);
     if (this.receta.comensales > 1) {
       this.receta.ingredientes.map((ingrediente) => {
         ingrediente.cantidad = ingrediente.cantidad / this.receta.comensales;

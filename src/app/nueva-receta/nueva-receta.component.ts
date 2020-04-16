@@ -8,9 +8,8 @@ import {
 } from '@angular/forms';
 import { RecetasService } from '../recetas.service';
 import { Router } from '@angular/router';
-import { Ingrediente } from '../model/Ingrediente';
-import { Alergeno } from '../model/alergeno';
 import { UnidadMedida } from '../model/unidad-medida';
+import { TipoAlergeno } from '../model/tipo-alergeno';
 
 @Component({
   selector: 'app-nueva-receta',
@@ -20,9 +19,6 @@ import { UnidadMedida } from '../model/unidad-medida';
 export class NuevaRecetaComponent implements OnInit {
   id: number;
   recetaForm: FormGroup;
-  ingredientesArray: FormArray;
-  pasosArray: FormArray;
-  alergenosArray: FormArray;
   alergenosData: string[];
   unidadesData: string[];
 
@@ -36,7 +32,7 @@ export class NuevaRecetaComponent implements OnInit {
     this.recetaForm = this.formBuilder.group({
       nombre: new FormControl('', [
         Validators.required,
-        Validators.minLength(3),
+        Validators.minLength(3)
       ]),
       comensales: new FormControl(4, Validators.required),
       ingredientes: this.formBuilder.array([this.createIngrediente()]),
@@ -45,7 +41,6 @@ export class NuevaRecetaComponent implements OnInit {
       imagen: new FormControl(''),
     });
 
-    this.ingredientesArray = this.recetaForm.get('ingredientes') as FormArray;
     this.alergenosData = this.getAlergenoValues();
     this.unidadesData = this.getUnidadMedidaValues();
   }
@@ -56,81 +51,88 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   getAlergenoValues(): string[] {
-    const result = Object.keys(Alergeno).filter((type) => type !== 'values');
+    const result = Object.keys(TipoAlergeno).filter((type) => type !== 'values');
     return ['', ...result];
   }
 
   createIngrediente(): FormGroup {
     return this.formBuilder.group({
-      ingrediente: '',
-      cantidad: 0,
+      ingrediente: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3)]),
+      cantidad: '',
       unidad: '',
     });
   }
 
   addIngrediente(): void {
-    this.ingredientesArray = this.recetaForm.get('ingredientes') as FormArray;
-    this.ingredientesArray.push(this.createIngrediente());
+    this.ingredientes.push(this.createIngrediente());
   }
 
   removeIngrediente(index: number): void {
-    this.ingredientesArray.removeAt(index);
+    this.ingredientes.removeAt(index);
   }
 
-  onUnidadSelected(event, index): void {
+  onUnidadSelected(event, index: number): void {
     this.ingredientes.value[index].unidad = event.target.value;
-    console.log(this.ingredientes.value);
   }
 
   createPaso(): FormGroup {
     return this.formBuilder.group({
-      // paso: new FormControl('', Validators.required),
-      paso: ''
+      paso: new FormControl('', Validators.required)
     });
   }
 
   addPaso(): void {
-    this.pasosArray = this.recetaForm.get('pasos') as FormArray;
-    this.pasosArray.push(this.createPaso());
+    this.pasos.push(this.createPaso());
   }
 
   removePaso(index: number): void {
-    this.pasosArray.removeAt(index);
+    this.pasos.removeAt(index);
   }
 
   createAlergeno(texto: string = ''): FormGroup {
     return this.formBuilder.group({
-      // alergeno: new FormControl(texto, Validators.required)
-      alergeno: texto
+      alergeno: new FormControl(texto, Validators.required)
     });
   }
 
   addAlergeno(texto: string = ''): void {
-    this.alergenosArray = this.recetaForm.get('alergenos') as FormArray;
-    this.alergenosArray.push(this.createAlergeno(texto));
+    this.alergenos.push(this.createAlergeno(texto));
   }
 
   removeAlergeno(index: number): void {
-    this.alergenosArray.removeAt(index);
+    this.alergenos.removeAt(index);
   }
 
   onAlergenosSelected(event): void {
-    this.addAlergeno(event.target.value);
+    let repetido = false;
+    for (const alergeno of this.alergenos.controls) {
+      if (alergeno.value.alergeno === event.target.value) {
+        repetido = true;
+        break;
+      }
+    }
+    if (!repetido) {
+      this.addAlergeno(event.target.value);
+    }
   }
 
   onSubmit(): void {
-    const recetaNew = {
-      id: Math.floor(Math.random() * (1000 + 1)),
-      nombre: this.nombre.value,
-      comensales: this.comensales.value,
-      ingredientes: this.ingredientes.value,
-      pasos: this.pasos.value,
-      alergenos: this.alergenos.value,
-      imagen: this.imagen.value,
-      favorita: false,
-    };
-    this.recetasService.addReceta(recetaNew);
-    this.router.navigate(['/recetas']);
+    if (this.recetaForm.valid) {
+      const recetaNew = {
+        id: Math.floor(Math.random() * (1000 + 1)),
+        nombre: this.nombre.value,
+        comensales: this.comensales.value,
+        ingredientes: this.ingredientes.value,
+        pasos: this.pasos.value,
+        alergenos: this.alergenos.value,
+        imagen: this.imagen.value,
+        favorita: false,
+      };
+      this.recetasService.addReceta(recetaNew);
+      this.router.navigate(['/recetas']);
+    }
   }
 
   get nombre() {

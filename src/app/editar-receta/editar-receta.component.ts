@@ -6,12 +6,13 @@ import {
   FormControl,
   Validators,
   FormArray,
+  ValidatorFn,
+  AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecetasService } from '../recetas.service';
 import { UnidadMedida } from '../model/unidad-medida';
-import { Alergeno } from '../model/alergeno';
-import { Ingrediente } from '../model/Ingrediente';
+import { TipoAlergeno } from '../model/tipo-alergeno';
 
 @Component({
   selector: 'app-editar-receta',
@@ -22,9 +23,6 @@ export class EditarRecetaComponent implements OnInit {
   id: number;
   receta: Receta;
   recetaForm: FormGroup;
-  ingredientesArray: FormArray;
-  pasosArray: FormArray;
-  alergenosArray: FormArray;
   alergenosData: string[];
   unidadesData: string[];
 
@@ -47,116 +45,130 @@ export class EditarRecetaComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
       ]),
-      comensales: new FormControl(this.receta.comensales, Validators.required),
-      ingredientes: this.formBuilder.array([
-        this.receta.ingredientes.map((ingrediente) => {
-          return this.createIngrediente(ingrediente);
-        })
-      ]),
-      pasos: this.formBuilder.array([
-        this.receta.pasos.map((paso) => {
-          return this.createPaso(paso.paso);
-        })
-      ]),
-      alergenos: this.formBuilder.array([this.receta.alergenos.map((alergeno) => {
-        return this.createAlergeno(alergeno.alergeno);
-      })]),
+      comensales: new FormControl(this.receta.comensales, [Validators.required, this.forbiddenValueValidator(/0/i)]),
+      ingredientes: this.formBuilder.array([]),
+      pasos: this.formBuilder.array([]),
+      alergenos: this.formBuilder.array([]),
       imagen: new FormControl(this.receta.imagen),
     });
+
+    this.receta.ingredientes.map(ing => {
+      this.ingredientes.push(this.formBuilder.group({
+        ingrediente: new FormControl(
+          ing.ingrediente,
+          Validators.required
+        ),
+        cantidad: new FormControl(ing.cantidad, Validators.required),
+        unidad: new FormControl(ing.unidad, Validators.required),
+      }));
+    });
+
+    this.receta.pasos.map(p => {
+      this.pasos.push(this.formBuilder.group({
+        paso: new FormControl(
+          p.paso,
+          Validators.required
+        )
+      }));
+    });
+
+    this.receta.alergenos.map(alerg => {
+      this.alergenos.push(this.formBuilder.group({
+        alergeno: new FormControl(
+          alerg.alergeno,
+          Validators.required
+        )
+      }));
+    });
+
+    this.unidadesData = this.getUnidadMedidaValues();
+    this.alergenosData = ['', ...this.getAlergenoValues()];
+
+    console.log(this.recetaForm);
   }
+
+  forbiddenValueValidator(nameRe: RegExp): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const forbidden = nameRe.test(control.value);
+      return forbidden ? {forbiddenValue: {value: control.value}} : null;
+    };
+  }
+
   getUnidadMedidaValues(): string[] {
     return Object.keys(UnidadMedida).filter((type) => type !== 'values');
   }
 
   getAlergenoValues(): string[] {
-    return Object.keys(Alergeno).filter((type) => type !== 'values');
+    return Object.keys(TipoAlergeno).filter((type) => type !== 'values');
   }
 
-  createIngrediente(ingrediente: Ingrediente): FormGroup {
-    return this.formBuilder.group({
-      ingrediente: new FormControl(
-        ingrediente.ingrediente,
-        Validators.required
-      ),
-      cantidad: new FormControl(ingrediente.cantidad, Validators.required),
-      unidad: new FormControl(ingrediente.unidad, Validators.required),
-    });
-  }
-
-  newIngrediente(): FormGroup {
+  createIngrediente(): FormGroup {
     return this.formBuilder.group({
       ingrediente: new FormControl(
         '',
         Validators.required
       ),
-      cantidad: new FormControl(1, Validators.required),
-      unidad: new FormControl(1, Validators.required),
+      cantidad: new FormControl(null),
+      unidad: new FormControl(null),
     });
   }
 
   addIngrediente(): void {
-    // this.ingredientesArray = this.recetaForm.get('ingredientes') as FormArray;
-    // this.ingredientesArray.push(this.createIngrediente());
-    this.ingredientes.push(this.newIngrediente());
+    this.ingredientes.push(this.createIngrediente());
   }
 
   removeIngrediente(index: number): void {
-    this.ingredientesArray.removeAt(index);
+    this.ingredientes.removeAt(index);
   }
 
-  createPaso(paso: string = ''): FormGroup {
+  createPaso(): FormGroup {
     return this.formBuilder.group({
-      paso: new FormControl(paso, Validators.required),
+      paso: new FormControl('', Validators.required),
     });
   }
 
   addPaso(): void {
-    this.pasosArray = this.recetaForm.get('pasos') as FormArray;
-    this.pasosArray.push(this.createPaso());
+    this.pasos.push(this.createPaso());
   }
 
   removePaso(index: number): void {
-    this.pasosArray.removeAt(index);
+    this.pasos.removeAt(index);
   }
 
   createAlergeno(texto: string = ''): FormGroup {
     return this.formBuilder.group({
-      // alergeno: new FormControl(texto, Validators.required)
-      alergeno: texto
+      alergeno: new FormControl(texto, Validators.required)
     });
   }
 
   addAlergeno(texto: string = ''): void {
-    this.alergenosArray = this.recetaForm.get('alergenos') as FormArray;
-    this.alergenosArray.push(this.createAlergeno(texto));
+    this.alergenos.push(this.createAlergeno(texto));
   }
 
   removeAlergeno(index: number): void {
-    this.alergenosArray.removeAt(index);
+    this.alergenos.removeAt(index);
   }
 
   onAlergenosSelected(event): void {
     this.addAlergeno(event.target.value);
   }
 
-  onUnidadSelected(event, index): void {
-    this.ingredientes.value[index].unidad = event.target.value;
-    console.log(this.ingredientes.value);
-  }
-
   onSubmit(): void {
-    const recetaNew = {
-      id: Math.floor(Math.random() * (1000 + 1)),
-      nombre: this.nombre.value,
-      comensales: this.comensales.value,
-      ingredientes: this.ingredientes.value,
-      pasos: this.pasos.value,
-      alergenos: this.alergenos.value,
-      imagen: this.imagen.value,
-      favorita: false,
-    };
-    this.recetasService.addReceta(recetaNew);
-    this.router.navigate(['/recetas']);
+    if (this.recetaForm.valid) {
+      const recetaNew = {
+        id: this.receta.id,
+        nombre: this.nombre.value,
+        comensales: this.comensales.value,
+        ingredientes: this.ingredientes.value,
+        pasos: this.pasos.value,
+        alergenos: this.alergenos.value,
+        imagen: this.imagen.value,
+        favorita: false,
+      };
+      this.recetasService.editReceta(recetaNew);
+      this.router.navigate(['/recetas']);
+    }
+
   }
 
   get nombre() {

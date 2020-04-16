@@ -184,7 +184,7 @@ export class RecetasService {
   }
 
   editReceta(receta: Receta) {
-    this.removeRecetaFav(receta);
+    this.removeReceta(receta);
     this.recetas.push(receta);
   }
 

@@ -32,8 +32,7 @@
         <label for="pasos">Ingredientes: </label>
         <ul>
           <li *ngFor="let ingrediente of receta.ingredientes">
-            {{ ingrediente.cantidad * receta.comensales }}
-            {{ ingrediente.unidad }} de
+             <span *ngIf="ingrediente.cantidad && ingrediente.cantidad > 0 ">{{ ingrediente.cantidad * receta.comensales }} {{ ingrediente.unidad }}  de</span>
             {{ ingrediente.ingrediente }}
           </li>
         </ul>
