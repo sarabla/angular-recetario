@@ -28,13 +28,26 @@
               <label for="comensales">Número de comensales: (*)</label>
               <div>
                 <input
-                  class="col-sm-1"
+                  class="col-sm-4"
                   id="comensales"
                   type="number"
                   formControlName="comensales"
                   min="1"
                   max="100"
                 />
+              </div>
+              <div
+                *ngIf="
+                  comensales.invalid && (comensales.dirty || comensales.touched)
+                "
+                class="alert alert-danger"
+              >
+                <div *ngIf="comensales.errors.required">
+                  El número de comensales es obligatorio.
+                </div>
+                <div *ngIf="comensales.errors.forbiddenValue">
+                  El número de comensales no puede ser 0.
+                </div>
               </div>
             </div>
             <div>
@@ -55,14 +68,16 @@
                       placeholder="Cantidad"
                       min="1"
                     />
-                    <input type="number" hidden formControlName="unidad" />
+                    <!-- <input type="number" formControlName="unidad" /> -->
                     <select
+                    formControlName="unidad"
                       class="col-sm-3 "
                       name="unidades"
                       class="select-option col-sm-3"
                       (change)="onUnidadSelected($event, i)"
+                      placeholder="Unidades"
                     >
-                      <option *ngFor="let unidad of unidadesData.values()">
+                      <option *ngFor="let unidad of unidadesData.values()" [ngValue]="unidad">
                         {{ unidad }}
                       </option>
                     </select>
@@ -92,22 +107,9 @@
                         El nombre del ingrediente debe tener al menos 3
                         caracteres.
                       </div>
-                    </div>
-                    <div
-                      *ngIf="
-                        ing.get('cantidad').invalid &&
-                        (ing.get('cantidad').dirty ||
-                          ing.get('cantidad').touched)
-                      "
-                      class="alert alert-danger"
-                    >
-                      <div
-                        *ngIf="
-                          ing.get('cantidad').errors.required ||
-                          ing.get('cantidad').value < 1
-                        "
-                      >
-                        La cantidad del ingrediente es obligatorio.
+                      <div *ngIf="(ing.get('cantidad').value === null || ing.get('cantidad').value === '')
+                          && (ing.get('unidad').dirty || ing.get('unidad').touched)" >
+                        Debe introducir una cantidad de ingrediente.
                       </div>
                     </div>
                   </div>

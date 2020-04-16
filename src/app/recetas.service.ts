@@ -191,7 +191,9 @@ export class RecetasService {
   removeReceta(receta: Receta) {
     this.removeRecetaFav(receta);
     const index = this.recetas.findIndex((element) => element.id === receta.id);
-    this.recetas.splice(index, 1);
+    if (index > -1) {
+      this.recetas.splice(index, 1);
+    }
   }
 
   getFavs(): Observable<Array<Receta>> {
@@ -207,7 +209,10 @@ export class RecetasService {
     const index = this.recetasFavs.findIndex(
       (element) => element.id === receta.id
     );
-    this.recetasFavs.splice(index, 1);
-    receta.favorita = false;
+    if (index > -1) {
+      this.recetasFavs.splice(index, 1);
+      receta.favorita = false;
+    }
+
   }
 }

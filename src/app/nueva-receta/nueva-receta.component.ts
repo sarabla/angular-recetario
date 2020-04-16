@@ -5,6 +5,8 @@ import {
   FormGroup,
   FormControl,
   FormArray,
+  ValidatorFn,
+  AbstractControl,
 } from '@angular/forms';
 import { RecetasService } from '../recetas.service';
 import { Router } from '@angular/router';
@@ -32,9 +34,9 @@ export class NuevaRecetaComponent implements OnInit {
     this.recetaForm = this.formBuilder.group({
       nombre: new FormControl('', [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(3),
       ]),
-      comensales: new FormControl(4, Validators.required),
+      comensales: new FormControl(4, [Validators.required, this.forbiddenValueValidator(/0/i)]),
       ingredientes: this.formBuilder.array([this.createIngrediente()]),
       pasos: this.formBuilder.array([this.createPaso()]),
       alergenos: this.formBuilder.array([]),
@@ -45,13 +47,24 @@ export class NuevaRecetaComponent implements OnInit {
     this.unidadesData = this.getUnidadMedidaValues();
   }
 
+  forbiddenValueValidator(nameRe: RegExp): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const forbidden = nameRe.test(control.value);
+      return forbidden ? {forbiddenValue: {value: control.value}} : null;
+    };
+  }
+
   getUnidadMedidaValues(): string[] {
-    const result = Object.keys(UnidadMedida).filter((type) => type !== 'values');
+    const result = Object.keys(UnidadMedida).filter(
+      (type) => type !== 'values'
+    );
     return ['', ...result];
   }
 
   getAlergenoValues(): string[] {
-    const result = Object.keys(TipoAlergeno).filter((type) => type !== 'values');
+    const result = Object.keys(TipoAlergeno).filter(
+      (type) => type !== 'values'
+    );
     return ['', ...result];
   }
 
@@ -59,7 +72,8 @@ export class NuevaRecetaComponent implements OnInit {
     return this.formBuilder.group({
       ingrediente: new FormControl('', [
         Validators.required,
-        Validators.minLength(3)]),
+        Validators.minLength(3),
+      ]),
       cantidad: '',
       unidad: '',
     });
@@ -79,7 +93,7 @@ export class NuevaRecetaComponent implements OnInit {
 
   createPaso(): FormGroup {
     return this.formBuilder.group({
-      paso: new FormControl('', Validators.required)
+      paso: new FormControl('', Validators.required),
     });
   }
 
@@ -93,7 +107,7 @@ export class NuevaRecetaComponent implements OnInit {
 
   createAlergeno(texto: string = ''): FormGroup {
     return this.formBuilder.group({
-      alergeno: new FormControl(texto, Validators.required)
+      alergeno: new FormControl(texto, Validators.required),
     });
   }
 
@@ -106,15 +120,17 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   onAlergenosSelected(event): void {
-    let repetido = false;
-    for (const alergeno of this.alergenos.controls) {
-      if (alergeno.value.alergeno === event.target.value) {
-        repetido = true;
-        break;
+    if (event.target.value !== '') {
+      let repetido = false;
+      for (const alergeno of this.alergenos.controls) {
+        if (alergeno.value.alergeno === event.target.value) {
+          repetido = true;
+          break;
+        }
       }
-    }
-    if (!repetido) {
-      this.addAlergeno(event.target.value);
+      if (!repetido) {
+        this.addAlergeno(event.target.value);
+      }
     }
   }
 

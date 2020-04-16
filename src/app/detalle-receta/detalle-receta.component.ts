@@ -20,16 +20,23 @@ export class DetalleRecetaComponent implements OnInit {
   ngOnInit(): void {
     this.id = Number(this.activatedRoute.snapshot.params.id);
     this.receta = this.recetasService.getOne(this.id);
-    console.log(this.receta.imagen);
-    if (this.receta.comensales > 1) {
-      this.receta.ingredientes.map((ingrediente) => {
-        ingrediente.cantidad = ingrediente.cantidad / this.receta.comensales;
-      });
-    }
+    // if (this.receta.comensales > 1) {
+    //   this.receta.ingredientes.map((ingrediente) => {
+    //     ingrediente.cantidad = ingrediente.cantidad / this.receta.comensales;
+    //   });
+    // }
   }
 
   modificarComensales(aumento: number): void {
-    if (this.receta.comensales + aumento > 0 ) {
+    if (this.receta.comensales + aumento > 0) {
+      this.receta.ingredientes.map((ingrediente) => {
+        if (this.receta.comensales === 1) {
+          ingrediente.cantidad = ingrediente.cantidad * (this.receta.comensales + aumento);
+        } else {
+          const cantidadParaUno = ingrediente.cantidad / this.receta.comensales;
+          ingrediente.cantidad = cantidadParaUno * (this.receta.comensales + aumento);
+        }
+      });
       this.receta.comensales = this.receta.comensales + aumento;
     }
   }

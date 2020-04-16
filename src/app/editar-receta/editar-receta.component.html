@@ -33,7 +33,7 @@
               <label for="comensales">Número de comensales: </label>
               <div>
                 <input
-                  class="col-sm-2"
+                  class="col-sm-4"
                   id="comensales"
                   type="number"
                   formControlName="comensales"
@@ -61,7 +61,7 @@
                 <div *ngFor="let ing of ingredientes.controls; let i = index">
                   <div [formGroupName]="i">
                     <input
-                      class="col-sm-5"
+                      class="col-sm-4"
                       type="text"
                       formControlName="ingrediente"
                       placeholder="Ingrediente"

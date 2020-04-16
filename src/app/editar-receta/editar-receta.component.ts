@@ -150,7 +150,18 @@ export class EditarRecetaComponent implements OnInit {
   }
 
   onAlergenosSelected(event): void {
-    this.addAlergeno(event.target.value);
+    if (event.target.value !== '') {
+      let repetido = false;
+      for (const alergeno of this.alergenos.controls) {
+        if (alergeno.value.alergeno === event.target.value) {
+          repetido = true;
+          break;
+        }
+      }
+      if (!repetido) {
+        this.addAlergeno(event.target.value);
+      }
+    }
   }
 
   onSubmit(): void {
