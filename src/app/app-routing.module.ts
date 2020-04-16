@@ -13,7 +13,6 @@ const routes: Routes = [
   { path: 'recetas/new', component: NuevaRecetaComponent },
   { path: 'recetas/edit/:id', component: EditarRecetaComponent },
   { path: 'recetas/:id', component: DetalleRecetaComponent },
-  // { path: 'help', component: HelpComponent },
   { path: '', redirectTo: 'recetas', pathMatch: 'full' },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', redirectTo: 'not-found' },

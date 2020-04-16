@@ -82,6 +82,11 @@ export class RecetasService {
           unidad: UnidadMedida.gramos,
         },
         {
+          ingrediente: 'Salsa rosa',
+          cantidad: 200,
+          unidad: UnidadMedida.mililitros,
+        },
+        {
           ingrediente: 'Tomate',
           cantidad: 100,
           unidad: UnidadMedida.gramos,
@@ -100,11 +105,6 @@ export class RecetasService {
           ingrediente: 'Jamón cocido',
           cantidad: 100,
           unidad: UnidadMedida.gramos,
-        },
-        {
-          ingrediente: 'Salsa rosa',
-          cantidad: 200,
-          unidad: UnidadMedida.mililitros,
         },
       ],
       comensales: 1,
@@ -131,6 +131,11 @@ export class RecetasService {
           unidad: UnidadMedida.gramos,
         },
         {
+          ingrediente: 'Salsa rosa',
+          cantidad: 200,
+          unidad: UnidadMedida.mililitros,
+        },
+        {
           ingrediente: 'Tomate',
           cantidad: 100,
           unidad: UnidadMedida.gramos,
@@ -149,11 +154,6 @@ export class RecetasService {
           ingrediente: 'Jamón cocido',
           cantidad: 100,
           unidad: UnidadMedida.gramos,
-        },
-        {
-          ingrediente: 'Salsa rosa',
-          cantidad: 200,
-          unidad: UnidadMedida.mililitros,
         },
       ],
       comensales: 1,
@@ -186,6 +186,9 @@ export class RecetasService {
   editReceta(receta: Receta) {
     this.removeReceta(receta);
     this.recetas.push(receta);
+    if (receta.favorita) {
+      this.addRecetaFav(receta);
+    }
   }
 
   removeReceta(receta: Receta) {

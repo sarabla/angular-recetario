@@ -49,7 +49,7 @@
         </ul>
       </div>
 
-      <div>
+      <div *ngIf="receta.alergenos.length > 0">
         <label for="alergenos">Alérgenos: </label>
         <ul>
           <li *ngFor="let alergeno of receta.alergenos.values()">

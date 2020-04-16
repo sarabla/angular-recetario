@@ -72,11 +72,18 @@
                       formControlName="cantidad"
                       placeholder="Cantidad"
                     />
-                    <input
-                      class="col-sm-3"
-                      type="text"
-                      formControlName="unidad"
-                    />
+                    <select
+                    formControlName="unidad"
+                      class="col-sm-3 "
+                      name="unidades"
+                      class="select-option col-sm-3"
+                      (change)="onUnidadSelected($event, i)"
+                      placeholder="Unidades"
+                    >
+                      <option *ngFor="let unidad of unidadesData.values()" [ngValue]="unidad">
+                        {{ unidad }}
+                      </option>
+                    </select>
                     <button
                       class="btn mce-btn-small col-sm-1"
                       (click)="removeIngrediente(i)"
@@ -101,6 +108,10 @@
                       <div *ngIf="ing.get('ingrediente').errors.minlength">
                         El nombre del ingrediente debe tener al menos 3
                         caracteres.
+                      </div>
+                      <div *ngIf="(ing.get('cantidad').value === null || ing.get('cantidad').value === '')
+                          && (ing.get('unidad').dirty || ing.get('unidad').touched)" >
+                        Debe introducir una cantidad de ingrediente.
                       </div>
                     </div>
                     <div

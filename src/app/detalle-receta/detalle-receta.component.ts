@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecetasService } from '../recetas.service';
 import { Receta } from '../model/receta';
+import { UnidadMedida } from '../model/unidad-medida';
 
 @Component({
   selector: 'app-detalle-receta',
@@ -20,11 +21,15 @@ export class DetalleRecetaComponent implements OnInit {
   ngOnInit(): void {
     this.id = Number(this.activatedRoute.snapshot.params.id);
     this.receta = this.recetasService.getOne(this.id);
-    // if (this.receta.comensales > 1) {
-    //   this.receta.ingredientes.map((ingrediente) => {
-    //     ingrediente.cantidad = ingrediente.cantidad / this.receta.comensales;
-    //   });
-    // }
+    this.formatIngredientes();
+  }
+
+  formatIngredientes(): void {
+    this.receta.ingredientes.map(ingrediente => {
+      if (ingrediente.unidad.includes(':')) {
+        ingrediente.unidad = ingrediente.unidad.split(':')[1].trim() as UnidadMedida;
+      }
+    });
   }
 
   modificarComensales(aumento: number): void {

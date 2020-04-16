@@ -5,11 +5,21 @@
         <div class="card-body">
           <h2>Nueva Receta</h2>
           <form [formGroup]="recetaForm">
+            <div *ngIf="error" class="alert alert-danger" style="margin-top:10px">
+              <div>
+                Revise bien los campos.
+              </div>
+            </div>
             <div>
               <div>
                 <label for="nombre">Nombre: (*)</label>
                 <div>
-                  <input class="col-sm-10" id="nombre" type="text" formControlName="nombre" />
+                  <input
+                    class="col-sm-10"
+                    id="nombre"
+                    type="text"
+                    formControlName="nombre"
+                  />
                 </div>
               </div>
               <div
@@ -68,16 +78,18 @@
                       placeholder="Cantidad"
                       min="1"
                     />
-                    <!-- <input type="number" formControlName="unidad" /> -->
                     <select
-                    formControlName="unidad"
-                      class="col-sm-3 "
+                      formControlName="unidad"
+                      class="col-sm-3"
                       name="unidades"
                       class="select-option col-sm-3"
                       (change)="onUnidadSelected($event, i)"
                       placeholder="Unidades"
                     >
-                      <option *ngFor="let unidad of unidadesData.values()" [ngValue]="unidad">
+                      <option
+                        *ngFor="let unidad of unidadesData.values()"
+                        [ngValue]="unidad"
+                      >
                         {{ unidad }}
                       </option>
                     </select>
@@ -107,8 +119,13 @@
                         El nombre del ingrediente debe tener al menos 3
                         caracteres.
                       </div>
-                      <div *ngIf="(ing.get('cantidad').value === null || ing.get('cantidad').value === '')
-                          && (ing.get('unidad').dirty || ing.get('unidad').touched)" >
+                      <div
+                        *ngIf="
+                          (ing.get('cantidad').value === null ||
+                            ing.get('cantidad').value === '') &&
+                          (ing.get('unidad').dirty || ing.get('unidad').touched)
+                        "
+                      >
                         Debe introducir una cantidad de ingrediente.
                       </div>
                     </div>
@@ -206,16 +223,6 @@
             </div>
           </form>
           <div>
-            <!-- <div
-              *ngIf="
-                !recetaForm.valid && recetaForm.touched && recetaForm.dirty
-              "
-              class="alert alert-danger"
-            >
-              <div>
-                Revise y corrija los campos obligatorios.
-              </div>
-            </div> -->
             <button
               class="btn btn-primary"
               style="margin-top: 20px; padding-block: 5px;"

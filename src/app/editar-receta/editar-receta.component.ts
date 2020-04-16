@@ -39,7 +39,6 @@ export class EditarRecetaComponent implements OnInit {
       this.id = Number(paramId);
       this.receta = this.recetasService.getOne(this.id);
     }
-
     this.recetaForm = this.formBuilder.group({
       nombre: new FormControl(this.receta.nombre, [
         Validators.required,
@@ -52,6 +51,9 @@ export class EditarRecetaComponent implements OnInit {
       imagen: new FormControl(this.receta.imagen),
     });
 
+    this.unidadesData = this.getUnidadMedidaValues();
+    this.alergenosData = ['', ...this.getAlergenoValues()];
+
     this.receta.ingredientes.map(ing => {
       this.ingredientes.push(this.formBuilder.group({
         ingrediente: new FormControl(
@@ -59,7 +61,7 @@ export class EditarRecetaComponent implements OnInit {
           Validators.required
         ),
         cantidad: new FormControl(ing.cantidad, Validators.required),
-        unidad: new FormControl(ing.unidad, Validators.required),
+        unidad: new FormControl(this.formatUnid(ing.unidad), Validators.required),
       }));
     });
 
@@ -80,11 +82,21 @@ export class EditarRecetaComponent implements OnInit {
         )
       }));
     });
+  }
 
-    this.unidadesData = this.getUnidadMedidaValues();
-    this.alergenosData = ['', ...this.getAlergenoValues()];
-
-    console.log(this.recetaForm);
+  formatUnid(unidad: string): string {
+    if (unidad.includes(':')) {
+      return unidad;
+    }
+    const unidades = Object.keys(UnidadMedida).filter((type) => type !== 'values');
+    const unid = unidad.toLowerCase();
+    for (let i = 0; i < unidades.length; i++) {
+      const unidadData = unidades[i];
+      if (unid === unidadData) {
+        return i.toString() + ': ' + unid;
+      }
+    }
+    return unidad;
   }
 
   forbiddenValueValidator(nameRe: RegExp): ValidatorFn {
@@ -147,6 +159,10 @@ export class EditarRecetaComponent implements OnInit {
 
   removeAlergeno(index: number): void {
     this.alergenos.removeAt(index);
+  }
+
+  onUnidadSelected(event, index: number): void {
+    this.ingredientes.value[index].unidad = event.target.value;
   }
 
   onAlergenosSelected(event): void {

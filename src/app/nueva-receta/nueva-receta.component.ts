@@ -23,6 +23,7 @@ export class NuevaRecetaComponent implements OnInit {
   recetaForm: FormGroup;
   alergenosData: string[];
   unidadesData: string[];
+  error = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -136,6 +137,7 @@ export class NuevaRecetaComponent implements OnInit {
 
   onSubmit(): void {
     if (this.recetaForm.valid) {
+      this.error = false;
       const recetaNew = {
         id: Math.floor(Math.random() * (1000 + 1)),
         nombre: this.nombre.value,
@@ -148,6 +150,8 @@ export class NuevaRecetaComponent implements OnInit {
       };
       this.recetasService.addReceta(recetaNew);
       this.router.navigate(['/recetas']);
+    } else {
+      this.error = true;
     }
   }
 
