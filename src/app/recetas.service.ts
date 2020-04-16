@@ -3,6 +3,7 @@ import { Receta } from './model/receta';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { UnidadMedida } from './model/unidad-medida';
 import { Alergeno } from './model/alergeno';
+import { TipoAlergeno } from './model/tipo-alergeno';
 
 @Injectable({
   providedIn: 'root',
@@ -31,12 +32,12 @@ export class RecetasService {
       ],
       comensales: 1,
       pasos: [
-        'Se ponen a cocer los espaguetis.',
-        'Se fríe el bacon.',
-        'Se cuelan los espaguetis.',
-        'Se añade la nata y el bacon frito.',
+        {paso: 'Se ponen a cocer los espaguetis.'},
+        {paso: 'Se fríe el bacon.'},
+        {paso: 'Se cuelan los espaguetis.'},
+        {paso: 'Se añade la nata y el bacon frito.'},
       ],
-      alergenos: [Alergeno.leche],
+      alergenos: [{alergeno: TipoAlergeno.leche}],
       imagen: '',
       favorita: false,
     },
@@ -62,10 +63,10 @@ export class RecetasService {
       ],
       comensales: 1,
       pasos: [
-        'Se ponen a cocer el caldo',
-        'Se pica el ajo.',
-        'Se añade el ajo y el pan',
-        'Se deja cocer unos minutos.',
+        {paso: 'Se ponen a cocer el caldo'},
+        {paso: 'Se pica el ajo.'},
+        {paso: 'Se añade el ajo y el pan'},
+        {paso: 'Se deja cocer unos minutos.'},
       ],
       alergenos: [],
       imagen: '',
@@ -108,12 +109,12 @@ export class RecetasService {
       ],
       comensales: 1,
       pasos: [
-        'Se ponen a cocer los tirabuzones.',
-        'Se pican todos los ingredientes.',
-        'Se cuelan los tirabuzones.',
-        'Se añade los ingredientes picados y se adereza con la salsa.',
+        {paso: 'Se ponen a cocer los tirabuzones.'},
+        {paso: 'Se pican todos los ingredientes.'},
+        {paso: 'Se cuelan los tirabuzones.'},
+        {paso: 'Se añade los ingredientes picados y se adereza con la salsa.'},
       ],
-      alergenos: [Alergeno.leche],
+      alergenos: [{alergeno: TipoAlergeno.leche}],
       imagen: '',
       favorita: true,
     },
@@ -157,12 +158,12 @@ export class RecetasService {
       ],
       comensales: 1,
       pasos: [
-        'Se ponen a cocer los tirabuzones.',
-        'Se pican todos los ingredientes.',
-        'Se cuelan los tirabuzones.',
-        'Se añade los ingredientes picados y se adereza con la salsa.',
+        {paso: 'Se ponen a cocer los tirabuzones.'},
+        {paso: 'Se pican todos los ingredientes.'},
+        {paso: 'Se cuelan los tirabuzones.'},
+        {paso: 'Se añade los ingredientes picados y se adereza con la salsa.'},
       ],
-      alergenos: [Alergeno.leche],
+      alergenos: [{alergeno: TipoAlergeno.leche}],
       imagen: '',
       favorita: true,
     },

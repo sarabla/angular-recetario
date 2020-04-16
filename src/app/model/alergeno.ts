@@ -1,15 +1,5 @@
-export enum Alergeno {
-  gluten = 'Gluten',
-  marisco = 'Marisco',
-  huevo = 'Huevo',
-  pescado = 'Pescado',
-  cacahuetes = 'Cacahuetes',
-  soja = 'Soja',
-  leche = 'Leche',
-  trazas = 'Trazas de cáscaras',
-  apio = 'Apio',
-  mostaza = 'Mostaza',
-  sesamo = 'Sésamo',
-  altramuces = 'Altramuces',
-  moluscos = 'Moluscos',
+import { TipoAlergeno } from './tipo-alergeno';
+
+export class Alergeno {
+  alergeno: TipoAlergeno;
 }

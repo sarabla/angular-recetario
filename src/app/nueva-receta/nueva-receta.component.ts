@@ -41,7 +41,7 @@ export class NuevaRecetaComponent implements OnInit {
       comensales: new FormControl(4, Validators.required),
       ingredientes: this.formBuilder.array([this.createIngrediente()]),
       pasos: this.formBuilder.array([this.createPaso()]),
-      alergenos: this.formBuilder.array([this.createAlergeno()]),
+      alergenos: this.formBuilder.array([]),
       imagen: new FormControl(''),
     });
 
@@ -51,41 +51,42 @@ export class NuevaRecetaComponent implements OnInit {
   }
 
   getUnidadMedidaValues(): string[] {
-    return Object.keys(UnidadMedida).filter((type) => type !== 'values');
+    const result = Object.keys(UnidadMedida).filter((type) => type !== 'values');
+    return ['', ...result];
   }
 
   getAlergenoValues(): string[] {
-    return Object.keys(Alergeno).filter((type) => type !== 'values');
+    const result = Object.keys(Alergeno).filter((type) => type !== 'values');
+    return ['', ...result];
   }
 
   createIngrediente(): FormGroup {
     return this.formBuilder.group({
-      ingrediente: new FormControl('', Validators.required),
-      cantidad: new FormControl(0, Validators.required),
-      unidad: new FormControl(0, Validators.required),
-    });
-  }
-
-  createPaso(): FormGroup {
-    return this.formBuilder.group({
-      paso: new FormControl('', Validators.required),
-    });
-  }
-
-  createAlergeno(): FormGroup {
-    return this.formBuilder.group({
-      alergeno: new FormControl('', Validators.required),
+      ingrediente: '',
+      cantidad: 0,
+      unidad: '',
     });
   }
 
   addIngrediente(): void {
-    // this.ingredientesArray = this.recetaForm.get('ingredientes') as FormArray;
-    // this.ingredientesArray.push(this.createIngrediente());
-    this.ingredientes.push(this.createIngrediente());
+    this.ingredientesArray = this.recetaForm.get('ingredientes') as FormArray;
+    this.ingredientesArray.push(this.createIngrediente());
   }
 
   removeIngrediente(index: number): void {
     this.ingredientesArray.removeAt(index);
+  }
+
+  onUnidadSelected(event, index): void {
+    this.ingredientes.value[index].unidad = event.target.value;
+    console.log(this.ingredientes.value);
+  }
+
+  createPaso(): FormGroup {
+    return this.formBuilder.group({
+      // paso: new FormControl('', Validators.required),
+      paso: ''
+    });
   }
 
   addPaso(): void {
@@ -97,13 +98,24 @@ export class NuevaRecetaComponent implements OnInit {
     this.pasosArray.removeAt(index);
   }
 
-  addAlergeno(): void {
+  createAlergeno(texto: string = ''): FormGroup {
+    return this.formBuilder.group({
+      // alergeno: new FormControl(texto, Validators.required)
+      alergeno: texto
+    });
+  }
+
+  addAlergeno(texto: string = ''): void {
     this.alergenosArray = this.recetaForm.get('alergenos') as FormArray;
-    this.alergenosArray.push(this.createAlergeno());
+    this.alergenosArray.push(this.createAlergeno(texto));
   }
 
   removeAlergeno(index: number): void {
     this.alergenosArray.removeAt(index);
+  }
+
+  onAlergenosSelected(event): void {
+    this.addAlergeno(event.target.value);
   }
 
   onSubmit(): void {

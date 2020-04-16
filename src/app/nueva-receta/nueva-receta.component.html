@@ -1,53 +1,76 @@
-<div class="container" style="margin-top:30px;">
-  <div class="card" >
+<div class="container" style="margin-top: 30px;">
+  <div class="card">
     <div class="row">
       <div class="col-sm-8 offset-sm-2">
         <div class="card-body">
           <h2>Nueva Receta</h2>
-          <form [formGroup]="recetaForm" (ngSubmit)="onSubmit()">
+          <form [formGroup]="recetaForm">
             <div>
               <label for="nombre">Nombre: </label>
-              <input id="nombre" type="text" formControlName="nombre" />
+              <div>
+                <input id="nombre" type="text" formControlName="nombre" />
+              </div>
             </div>
             <div>
               <label for="comensales">Número de comensales: </label>
-              <input id="comensales" type="number" formControlName="comensales" min=1 max=100/>
+              <div>
+                <input
+                  id="comensales"
+                  type="number"
+                  formControlName="comensales"
+                  min="1"
+                  max="100"
+                />
+              </div>
             </div>
             <div>
               <label for="ingredientes">Ingredientes: </label>
-              <div formArrayName="ingredientes" >
-                <div *ngFor="let ing of ingredientes.controls; let i = index;">
+              <div formArrayName="ingredientes">
+                <div *ngFor="let ing of ingredientes.controls; let i = index">
                   <div [formGroupName]="i">
-                    <input type="text" formControlName="ingrediente" placeholder="Ingrediente">
-                    <input type="number" formControlName="cantidad" placeholder="Cantidad">
-                    <input type="number" hidden formControlName="unidad">
-                    <select name="unidades">
-                      <option *ngFor="let unidad of unidadesData.values()" >
-                        {{unidad}}
+                    <input
+                      type="text"
+                      formControlName="ingrediente"
+                      placeholder="Ingrediente"
+                    />
+                    <input
+                      type="number"
+                      formControlName="cantidad"
+                      placeholder="Cantidad"
+                    />
+                    <input type="number" hidden formControlName="unidad" />
+                    <select name="unidades" class="select-option col-sm-3"
+                    (change)='onUnidadSelected($event, i)'>
+                      <option *ngFor="let unidad of unidadesData.values()">
+                        {{ unidad }}
                       </option>
                     </select>
 
-                    <button class="btn mce-btn-small" (click)="removeIngrediente(i)">
+                    <button
+                      class="btn mce-btn-small"
+                      (click)="removeIngrediente(i)"
+                    >
                       <span class="material-icons">
                         clear
                       </span>
                     </button>
                   </div>
                 </div>
-                <button class="btn btn-secondary">
+                <button class="btn btn-primary" (click)="addIngrediente()">
                   Añadir ingrediente
-                  <span class="icon material-icons">
-                    add_circle
-                  </span>
                 </button>
               </div>
             </div>
-            <div>
+            <div col-sm-7 offset-sm-2>
               <label for="pasos">Pasos: </label>
-              <div formArrayName="pasos" >
-                <div *ngFor="let ing of pasos.controls; let i = index;">
+              <div formArrayName="pasos">
+                <div *ngFor="let p of pasos.controls; let i = index">
                   <div [formGroupName]="i">
-                    <input type="text" formControlName="paso" placeholder="Instrucciones">
+                    <input
+                      type="text"
+                      formControlName="paso"
+                      placeholder="Escriba las instrucciones"
+                    />
                     <button class="btn mce-btn-small" (click)="removePaso(i)">
                       <span class="material-icons">
                         clear
@@ -55,28 +78,23 @@
                     </button>
                   </div>
                 </div>
-                <button class="btn btn-secondary">
+                <button class="btn btn-primary" (click)="addPaso()">
                   Añadir paso
-                  <span class="icon material-icons">
-                    add_circle
-                  </span>
                 </button>
               </div>
             </div>
             <div>
-              <label for="alergenosData">Alérgenos: </label>
-                <div class="row">
-                  <select name="alergenos"  [multiple]="true" placeholder="Choose your option" label="Example label">
-                    <option *ngFor="let type of alergenosData">
-                      {{type}}
-                    </option>
-                  </select>
-                </div>
-                <div formArrayName="alergenos" >
-                  <div *ngFor="let ing of alergenos.controls; let i = index;">
+              <div *ngIf="alergenosArray">
+                <div formArrayName="alergenos">
+                  <label for="alergenosData">Lista de alérgenos: </label>
+                  <div *ngFor="let alergeno of alergenos.controls; let i = index">
                     <div [formGroupName]="i">
-                      <input type="text" formControlName="alergeno" placeholder="alergeno">
-                      <button class="btn mce-btn-small" (click)="removeAlergeno(i)">
+                      <input
+                        type="text"
+                        formControlName="alergeno"/>
+                      <button
+                        class="btn mce-btn-small"
+                        (click)="removeAlergeno(i)">
                         <span class="material-icons">
                           clear
                         </span>
@@ -84,23 +102,40 @@
                     </div>
                   </div>
                 </div>
-
+              </div>
+            </div>
+            <div>
+              <label for="alergenosSelect">Selecciona los alérgenos: </label>
+              <select id="alergenosSelect" name="alergenos" class='select-option'
+              (change)='onAlergenosSelected($event)'>
+                <option *ngFor="let type of alergenosData">
+                  {{ type }}
+                </option>
+              </select>
             </div>
             <div>
               <label for="imagen">Foto: </label>
-              <input id="imagen" type="image" formControlName="imagen" />
+              <div>
+                <input id="imagen" type="file" accept="image/png, image/jpeg" formControlName="imagen" />
+              </div>
             </div>
           </form>
-          <button class="btn btn-primary" (click)="onSubmit()">
-            Guardar receta
-          </button>
+          <div>
+            <button class="btn btn-primary" style="margin-top: 20px; padding-block: 5px;" (click)="onSubmit()">
+              Guardar receta
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div>
-    <button class="btn btn-secondary" style="margin-top: 20px;" [routerLink]="['/recetas']">Volver</button>
+    <button
+      class="btn btn-secondary"
+      style="margin-top: 20px;"
+      [routerLink]="['/recetas']"
+    >
+      Volver
+    </button>
   </div>
-
 </div>
-

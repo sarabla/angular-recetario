@@ -55,11 +55,11 @@ export class EditarRecetaComponent implements OnInit {
       ]),
       pasos: this.formBuilder.array([
         this.receta.pasos.map((paso) => {
-          return this.createPaso(paso);
+          return this.createPaso(paso.paso);
         })
       ]),
       alergenos: this.formBuilder.array([this.receta.alergenos.map((alergeno) => {
-        return this.createAlergeno(alergeno);
+        return this.createAlergeno(alergeno.alergeno);
       })]),
       imagen: new FormControl(this.receta.imagen),
     });
@@ -72,27 +72,6 @@ export class EditarRecetaComponent implements OnInit {
     return Object.keys(Alergeno).filter((type) => type !== 'values');
   }
 
-  newIngrediente(): FormGroup {
-    return this.formBuilder.group({
-      ingrediente: new FormControl('', Validators.required),
-      cantidad: new FormControl(0, Validators.required),
-      unidad: new FormControl(0, Validators.required),
-    });
-  }
-
-  newPaso(): FormGroup {
-    return this.formBuilder.group({
-      paso: new FormControl('', Validators.required),
-    });
-  }
-
-  newAlergeno(): FormGroup {
-    return this.formBuilder.group({
-      alergeno: new FormControl('', Validators.required),
-    });
-  }
-
-
   createIngrediente(ingrediente: Ingrediente): FormGroup {
     return this.formBuilder.group({
       ingrediente: new FormControl(
@@ -104,15 +83,14 @@ export class EditarRecetaComponent implements OnInit {
     });
   }
 
-  createPaso(paso: string): FormGroup {
+  newIngrediente(): FormGroup {
     return this.formBuilder.group({
-      paso: new FormControl(paso, Validators.required),
-    });
-  }
-
-  createAlergeno(alergeno: string): FormGroup {
-    return this.formBuilder.group({
-      alergeno: new FormControl(alergeno, Validators.required),
+      ingrediente: new FormControl(
+        '',
+        Validators.required
+      ),
+      cantidad: new FormControl(1, Validators.required),
+      unidad: new FormControl(1, Validators.required),
     });
   }
 
@@ -126,22 +104,44 @@ export class EditarRecetaComponent implements OnInit {
     this.ingredientesArray.removeAt(index);
   }
 
+  createPaso(paso: string = ''): FormGroup {
+    return this.formBuilder.group({
+      paso: new FormControl(paso, Validators.required),
+    });
+  }
+
   addPaso(): void {
     this.pasosArray = this.recetaForm.get('pasos') as FormArray;
-    this.pasosArray.push(this.newPaso());
+    this.pasosArray.push(this.createPaso());
   }
 
   removePaso(index: number): void {
     this.pasosArray.removeAt(index);
   }
 
-  addAlergeno(): void {
+  createAlergeno(texto: string = ''): FormGroup {
+    return this.formBuilder.group({
+      // alergeno: new FormControl(texto, Validators.required)
+      alergeno: texto
+    });
+  }
+
+  addAlergeno(texto: string = ''): void {
     this.alergenosArray = this.recetaForm.get('alergenos') as FormArray;
-    this.alergenosArray.push(this.newAlergeno());
+    this.alergenosArray.push(this.createAlergeno(texto));
   }
 
   removeAlergeno(index: number): void {
     this.alergenosArray.removeAt(index);
+  }
+
+  onAlergenosSelected(event): void {
+    this.addAlergeno(event.target.value);
+  }
+
+  onUnidadSelected(event, index): void {
+    this.ingredientes.value[index].unidad = event.target.value;
+    console.log(this.ingredientes.value);
   }
 
   onSubmit(): void {
