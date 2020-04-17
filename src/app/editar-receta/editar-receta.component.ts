@@ -82,6 +82,7 @@ export class EditarRecetaComponent implements OnInit {
         )
       }));
     });
+    console.log(this.ingredientes);
   }
 
   formatUnid(unidad: string): string {

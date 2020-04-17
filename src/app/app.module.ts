@@ -12,6 +12,7 @@ import { DetalleRecetaComponent } from './detalle-receta/detalle-receta.componen
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NuevaRecetaComponent } from './nueva-receta/nueva-receta.component';
 import { EditarRecetaComponent } from './editar-receta/editar-receta.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { EditarRecetaComponent } from './editar-receta/editar-receta.component';
     DetalleRecetaComponent,
     NotFoundComponent,
     NuevaRecetaComponent,
-    EditarRecetaComponent
+    EditarRecetaComponent,
+    HomeComponent
   ],
   imports: [
     BrowserAnimationsModule,

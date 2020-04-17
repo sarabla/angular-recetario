@@ -12,6 +12,7 @@ import { RecetasService } from '../recetas.service';
 import { Router } from '@angular/router';
 import { UnidadMedida } from '../model/unidad-medida';
 import { TipoAlergeno } from '../model/tipo-alergeno';
+import { Receta } from '../model/receta';
 
 @Component({
   selector: 'app-nueva-receta',
@@ -138,15 +139,9 @@ export class NuevaRecetaComponent implements OnInit {
   onSubmit(): void {
     if (this.recetaForm.valid) {
       this.error = false;
-      const recetaNew = {
+      const recetaNew: Receta = {
         id: Math.floor(Math.random() * (1000 + 1)),
-        nombre: this.nombre.value,
-        comensales: this.comensales.value,
-        ingredientes: this.ingredientes.value,
-        pasos: this.pasos.value,
-        alergenos: this.alergenos.value,
-        imagen: this.imagen.value,
-        favorita: false,
+        ...this.recetaForm.value
       };
       this.recetasService.addReceta(recetaNew);
       this.router.navigate(['/recetas']);

@@ -1,8 +1,7 @@
-import { Ingrediente } from './Ingrediente';
-import { Alergeno } from './alergeno';
-import { Paso } from './paso';
+import { UnidadMedida } from './unidad-medida';
+import { TipoAlergeno } from './tipo-alergeno';
 
-export class Receta {
+export interface Receta {
   id: number;
   nombre: string;
   ingredientes: Array<Ingrediente>;
@@ -12,3 +11,18 @@ export class Receta {
   imagen: string;
   favorita: boolean;
 }
+
+export interface Ingrediente {
+  ingrediente: string;
+  cantidad: number;
+  unidad: UnidadMedida;
+}
+
+export interface Paso {
+  paso: string;
+}
+
+export interface Alergeno {
+  alergeno: TipoAlergeno;
+}
+

@@ -25,9 +25,11 @@ export class DetalleRecetaComponent implements OnInit {
   }
 
   formatIngredientes(): void {
-    this.receta.ingredientes.map(ingrediente => {
+    this.receta.ingredientes.map((ingrediente) => {
       if (ingrediente.unidad.includes(':')) {
-        ingrediente.unidad = ingrediente.unidad.split(':')[1].trim() as UnidadMedida;
+        ingrediente.unidad = ingrediente.unidad
+          .split(':')[1]
+          .trim() as UnidadMedida;
       }
     });
   }
@@ -35,12 +37,7 @@ export class DetalleRecetaComponent implements OnInit {
   modificarComensales(aumento: number): void {
     if (this.receta.comensales + aumento > 0) {
       this.receta.ingredientes.map((ingrediente) => {
-        if (this.receta.comensales === 1) {
-          ingrediente.cantidad = ingrediente.cantidad * (this.receta.comensales + aumento);
-        } else {
-          const cantidadParaUno = ingrediente.cantidad / this.receta.comensales;
-          ingrediente.cantidad = cantidadParaUno * (this.receta.comensales + aumento);
-        }
+        ingrediente.cantidad =  (ingrediente.cantidad / this.receta.comensales) * (this.receta.comensales + aumento);
       });
       this.receta.comensales = this.receta.comensales + aumento;
     }
