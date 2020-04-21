@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Receta } from './model/receta';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { UnidadMedida } from './model/unidad-medida';
-import { Alergeno } from './model/alergeno';
 import { TipoAlergeno } from './model/tipo-alergeno';
 
 @Injectable({

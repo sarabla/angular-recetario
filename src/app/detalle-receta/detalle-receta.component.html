@@ -60,7 +60,8 @@
 
       <div class="card-img" *ngIf="receta.imagen">
         <label for="imagen">Foto: </label>
-        <img src="{{ receta.imagen }}" />
+        <!-- <img src="'data:image/png;base64,'+ {{receta.imagen}}" /> -->
+        <img src={{receta.imagen}} />
       </div>
     </div>
   </div>

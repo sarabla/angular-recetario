@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren, Input } from '@angular/core';
 import { Receta } from '../model/receta';
 import { Router } from '@angular/router';
 import { RecetasService } from '../recetas.service';
@@ -12,13 +12,13 @@ export class ListadoRecetasComponent implements OnInit {
 
   selectedReceta: Receta;
   recetas: Array<Receta>;
-  recetasFav: Array<Receta>;
+  @Input()
+  busquedaBarra: string;
 
   constructor(private router: Router, private recetasService: RecetasService) {}
 
   ngOnInit(): void {
     this.getRecetas();
-    this.getFavs();
   }
 
   getRecetas(): void {
@@ -27,10 +27,18 @@ export class ListadoRecetasComponent implements OnInit {
       .subscribe((recetasList) => (this.recetas = recetasList));
   }
 
-  getFavs(): void {
-    this.recetasService
-      .getFavs()
-      .subscribe((recetasList) => (this.recetasFav = recetasList));
+  filter(listaRecetas: Array<Receta>): Array<Receta> {
+    if ( this.busquedaBarra !== null && this.busquedaBarra !== '') {
+      const lista = listaRecetas.filter(receta => {
+        if (this.busquedaBarra.includes(receta.nombre) || receta.nombre.includes(this.busquedaBarra)) {
+          return receta;
+        }
+      });
+      return lista;
+    } else {
+      return this.recetas;
+    }
+
   }
 
   selectReceta(receta: Receta): void {

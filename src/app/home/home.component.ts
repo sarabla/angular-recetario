@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  busqueda: string;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  enviarBusqueda(mensaje: string){
+    this.busqueda = mensaje;
   }
 
 }

@@ -11,8 +11,9 @@ import { RecetasFavoritasComponent } from './recetas-favoritas/recetas-favoritas
 import { DetalleRecetaComponent } from './detalle-receta/detalle-receta.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NuevaRecetaComponent } from './nueva-receta/nueva-receta.component';
-import { EditarRecetaComponent } from './editar-receta/editar-receta.component';
 import { HomeComponent } from './home/home.component';
+import { BarraBusquedaComponent } from './barra-busqueda/barra-busqueda.component';
+import { FilterPipe } from './barra-busqueda/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -22,8 +23,9 @@ import { HomeComponent } from './home/home.component';
     DetalleRecetaComponent,
     NotFoundComponent,
     NuevaRecetaComponent,
-    EditarRecetaComponent,
-    HomeComponent
+    HomeComponent,
+    BarraBusquedaComponent,
+    FilterPipe
   ],
   imports: [
     BrowserAnimationsModule,

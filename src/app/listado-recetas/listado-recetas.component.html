@@ -2,7 +2,10 @@
   <div class="card-body">
     <h2>Listado de recetas</h2>
     <ul>
-      <li *ngFor="let receta of recetas">
+      <li *ngFor="let receta of recetas | filter : busquedaBarra">
+        <div *ngIf="(recetas === null)">
+          No se han encontrado recetas para la búsqueda: {{busquedaBarra}}
+        </div>
         <div>
           <span (click)="selectReceta(receta)">{{ receta.nombre }}</span>
           <button class="fav btn mce-btn-small"
@@ -38,10 +41,9 @@
       </li>
     </ul>
   </div>
-
- <div>
-  <button class="btn btn-primary offset-md-1" style="margin-bottom: 30px;" [routerLink]="['/recetas/new']">
+</div>
+<div>
+  <button class="btn btn-primary offset-md-1" style="margin-top: 30px;" [routerLink]="['/recetas/new']">
     ¡Crea tu propia receta!
   </button>
  </div>
-</div>
