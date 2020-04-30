@@ -1,0 +1,17 @@
+<div class="container">
+  <div style="margin-top: 30px;">
+    <app-barra-busqueda (mensajeDesdeBarra)="enviarBusqueda($event)"></app-barra-busqueda>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-listado-recetas [busquedaBarra]="busqueda"></app-listado-recetas>
+    </div>
+
+    <div class="col-md-5">
+      <app-recetas-favoritas></app-recetas-favoritas>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,15 @@
+export enum TipoAlergeno {
+  gluten = 'Gluten',
+  marisco = 'Marisco',
+  huevo = 'Huevo',
+  pescado = 'Pescado',
+  cacahuetes = 'Cacahuetes',
+  soja = 'Soja',
+  leche = 'Leche',
+  trazas = 'Trazas de cáscaras',
+  apio = 'Apio',
+  mostaza = 'Mostaza',
+  sesamo = 'Sésamo',
+  altramuces = 'Altramuces',
+  moluscos = 'Moluscos',
+}
